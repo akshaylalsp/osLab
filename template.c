@@ -6,7 +6,8 @@ struct process_details{
     int bur;
     int wait;
     int ta;
-}processes[50],temp;
+}processes[50],temp;//processes is array for storing [50] process_details
+                    //temp is for swapping purpose
 
 void read(int n){
     printf("\nenter process id, arrival time, burst time : \n");
