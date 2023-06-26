@@ -7,15 +7,7 @@ int pageIsFound(int f[],int count,int a){
     }
     return 0;
 }
-int totalAccessed(int arr[],int i,int a){
-    int count = 0;
-    for(int j=i;j>=0;j--){
-        if(arr[j]==a)
-            count++;
-    }
-    return count;
-}
-int recentAccess(int arr[],int i,int a){
+int recentAccessLRU(int arr[],int i,int a){
     int count=0;
     for(int j=i;j>=0;j--){
         count++;
@@ -23,26 +15,19 @@ int recentAccess(int arr[],int i,int a){
             return count;
     }
 }
-void lfu(int arr[],int n, int f[],int fno){
-    int index=-1,count=0,p=0,i,j,x,k,lfuArr[fno][n];
-    int m1,m2;
-    int temp[fno][2];
+void lru(int arr[],int n, int f[],int fno){
+    int index,count=0,p=0,i,j,k,x,lruArr[fno][n];
     for( i=0;i<n;i++){
         if(pageIsFound(f,count,arr[i])){}
         else{
             p++;
             if(count == fno){
-                int min = n;
-                for(k=0;k<fno;k++){
-                    temp[k][1]=totalAccessed(arr,i,f[k]);
-                    temp[k][2]=recentAccess(arr,i,f[k]);
-                    if(min>temp[k][1]){
-                        min = temp[k][1];
-                        index = k;
-                    }
-                    else if(min == temp[k][1]){
-                        if(temp[k][2] > temp[index][2])
-                            index = k;
+                int max = -1;
+                for(j=0;j<fno;j++){
+                    x = recentAccessLRU(arr,i,f[j]);
+                    if(x > max){
+                        index = j;
+                        max = x;
                     }
                 }
                 f[index] = arr[i];
@@ -53,25 +38,25 @@ void lfu(int arr[],int n, int f[],int fno){
         }
         for(j=0,k=0;j<fno;j++){
             if(k<count)
-                lfuArr[k++][i] = f[j];
+                lruArr[k++][i] = f[j];
             else 
-                lfuArr[k++][i] = -1;
+                lruArr[k++][i] = -1;
         }
     }
     for(i=0;i<fno;i++){
         for(j=0;j<n;j++){
-            if(lfuArr[i][j] != -1)
-                printf("%d  ",lfuArr[i][j]);
+            if(lruArr[i][j] != -1)
+                printf("%d  ",lruArr[i][j]);
             else 
                 printf("   ");
         }
         printf("\n");
     }
-    printf("Page Faults(in LFU) = %d\n",p);
+    printf("Page Faults(in LRU) = %d\n",p);
 }
 
 void main(){
-    printf("LFU Page Replacement Algorithm\n");
+    printf("LRU Page Replacement Algorithm\n");
     int n,i,frameNum;
     printf("Enter the number of frames: ");
     scanf("%d",&frameNum);
@@ -87,5 +72,5 @@ void main(){
         printf("%d  ",arr[i]);
     }
     printf("\nPage Frames\n");
-    lfu(arr,n ,F,frameNum);
+    lru(arr,n ,F,frameNum);
 }
