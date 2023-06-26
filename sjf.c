@@ -8,7 +8,7 @@ struct process
 void sort(int n){
     for(int i=0;i<n-1;i++){
         for(int j=0;j<n-1-i;j++){
-            if(processes[j].at > processes[j+1].at ){
+            if(processes[j].bt > processes[j+1].bt ){
                 temp = processes[j];
                 processes[j] = processes[j+1];
                 processes[j+1]=temp;
@@ -33,13 +33,14 @@ void display(int n){
 void read(int n){
     printf("\nenter arrival and burst time :");
     for(int i=0;i<n;i++){
-        scanf("%d%d",&processes[i].at,&processes[i].bt);
+        scanf("%d",&processes[i].bt);
         processes[i].pid = i;
+        processes[i].at = 0;
     }
     sort(n);
 }
 
-void fcfs(int n){
+void sjf(int n){
     int i = 0;
     processes[i].wt =0;
     for(i=1;i<n;i++){
@@ -57,7 +58,7 @@ int main(int argc, char const *argv[])
     printf("enter no of processes : ");
     scanf("%d",&n);
     read(n);
-    fcfs(n);
+    sjf(n);
     display(n);
     return 0;
 }
